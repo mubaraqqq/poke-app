@@ -23,13 +23,53 @@ class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+const isDev = process.env.NODE_ENV === 'development';
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
+let mainWindow: BrowserWindow | null = null;
+let pokemonWindow: BrowserWindow | null = null;
+
+function createPokemonWindow(data: unknown) {
+  if (pokemonWindow) pokemonWindow.hide();
+
+  pokemonWindow = new BrowserWindow({
+    width: 604,
+    height: 508,
+    backgroundColor: '#dd5789',
+    // icon: getAssetPath('icon.png'),
+    webPreferences: {
+      // nodeIntegration: true,
+      preload: app.isPackaged
+        ? path.join(__dirname, 'preload.js')
+        : path.join(__dirname, '../../.erb/dll/preload.js'),
+    },
+  });
+
+  pokemonWindow.on('ready-to-show', () => {
+    if (!pokemonWindow) {
+      throw new Error('"mainWindow" is not defined');
+    }
+    if (process.env.START_MINIMIZED) {
+      pokemonWindow.minimize();
+    } else {
+      pokemonWindow.show();
+      pokemonWindow.webContents.send('receive-pokemon', data);
+    }
+  });
+
+  pokemonWindow.loadURL(
+    isDev
+      ? `http://localhost:1212/#/pokemon`
+      : `file://${path.resolve(
+          __dirname,
+          '../renderer/',
+          'index.html#/pokemon'
+        )}`
+  );
+
+  pokemonWindow.on('close', () => {
+    pokemonWindow = null;
+  });
+}
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -128,6 +168,9 @@ app
   .whenReady()
   .then(() => {
     createWindow();
+    ipcMain.on('open-pokemon', (_, data) => {
+      createPokemonWindow(data);
+    });
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.

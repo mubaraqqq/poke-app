@@ -1,10 +1,15 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example';
+export type Channels =
+  | 'receive-pokemon'
+  | 'open-pokemon'
+  | 'fee'
+  | 'ipc-example'
+  | '5';
 
 const electronHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, args: unknown[]) {
+    sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, args);
     },
     on(channel: Channels, func: (...args: unknown[]) => void) {
@@ -19,6 +24,11 @@ const electronHandler = {
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
+    receivePoke: (func: (...args: string[]) => void) =>
+      ipcRenderer.on('receive-pokemon', (event, ...args: string[]) =>
+        func(...args)
+      ),
+    invoke: () => ipcRenderer.invoke('my-invokable-ipc'),
   },
 };
 
