@@ -4,7 +4,7 @@ import { PokemonListResponse } from 'types/api-type';
 import icon from '../../../assets/icon.svg';
 
 const Home = () => {
-  const { ipcRenderer } = window.electron;
+  // const { ipcRenderer } = window.electron;
   const [page, setPage] = useState<number>(0);
 
   const fetchPokemonList = (offset: number) =>
@@ -26,12 +26,9 @@ const Home = () => {
     }
   );
 
-  const openPokemonWindow = useCallback(
-    (data: string) => {
-      ipcRenderer.sendMessage('open-pokemon', data);
-    },
-    [ipcRenderer]
-  );
+  const openPokemonWindow = useCallback((data: string) => {
+    window.electron.ipcRenderer.sendMessage('open-pokemon', data);
+  }, []);
 
   useEffect(() => {
     if (response) {

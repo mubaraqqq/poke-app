@@ -3,7 +3,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useQuery } from 'react-query';
 import { PokemonDoc } from 'types/pokemon-type';
 
-const { ipcRenderer } = window.electron;
+// const { ipcRenderer } = window.electron;
 
 const PokemonDetails = () => {
   const [message, setMessage] = useState<string>('');
@@ -14,7 +14,7 @@ const PokemonDetails = () => {
     );
 
   useEffect(() => {
-    ipcRenderer.receivePoke((data) => {
+    window.electron.ipcRenderer.receivePoke((data) => {
       console.log(data);
 
       setMessage(data[0]);
