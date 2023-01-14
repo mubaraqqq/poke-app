@@ -25,6 +25,13 @@ class AppUpdater {
 
 const isDev = process.env.NODE_ENV === 'development';
 
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../../assets');
+const getAssetPath = (...paths: string[]): string => {
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
 let mainWindow: BrowserWindow | null = null;
 let pokemonWindow: BrowserWindow | null = null;
 
@@ -35,7 +42,7 @@ function createPokemonWindow(data: unknown) {
     width: 604,
     height: 508,
     backgroundColor: '#dd5789',
-    // icon: getAssetPath('icon.png'),
+    icon: getAssetPath('icon.png'),
     webPreferences: {
       // nodeIntegration: true,
       preload: app.isPackaged
@@ -100,14 +107,6 @@ const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
   }
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
 
   mainWindow = new BrowserWindow({
     show: false,
