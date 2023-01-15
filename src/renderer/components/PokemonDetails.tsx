@@ -5,6 +5,7 @@ import { capitalize } from 'main/util';
 import { useEffect, useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useQuery } from 'react-query';
+import { resolvePokemonTypes } from 'renderer/constants';
 import { PokemonDoc } from 'types/pokemon-type';
 
 const PokemonDetails = () => {
@@ -26,7 +27,6 @@ const PokemonDetails = () => {
     isLoading,
     isError,
     data: pokemon,
-    isPreviousData,
   } = useQuery<PokemonDoc>(['pokemon', message], () => fetchPokemon(message));
 
   if (isLoading)
@@ -43,15 +43,31 @@ const PokemonDetails = () => {
   if (isError) return <div>Error fetching Pokemon</div>;
   if (!pokemon) return <div>Pokemon not found</div>;
 
+  const pokemonTypeArr = resolvePokemonTypes(pokemon.types);
+
   return (
     <HelmetProvider>
       <Helmet>
         <title>{`Pokemon - ${capitalizedName}`}</title>
       </Helmet>
 
-      <div>Pokemon name - {capitalizedName}</div>
+      <h1>{capitalizedName}</h1>
+      <p>Height: {pokemon.height}</p>
+      <p>Weight: {pokemon.weight}</p>
+      <p>Base Experience: {pokemon.base_experience}</p>
+      <p>Species: {pokemon.species.name}</p>
+      <p>Order: {pokemon.order}</p>
+
       <div>
-        {pokemon.name} {pokemon.height}
+        <p title="pokemon-type">Types</p>
+        <Stack direction="row" spacing={1}>
+          {pokemonTypeArr.map((type) => (
+            <Stack key={type.name} direction="column" alignItems="center">
+              <img src={type.image} alt={type.name} width="30" height="30" />
+              <p>{type.name}</p>
+            </Stack>
+          ))}
+        </Stack>
       </div>
     </HelmetProvider>
   );

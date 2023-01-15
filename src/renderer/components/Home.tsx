@@ -69,7 +69,7 @@ const Home = () => {
   return (
     <div>
       <div className="Hello">
-        <img width="125" alt="icon" src={icon} />
+        <img width="125" height="125" alt="icon" src={icon} />
       </div>
 
       <h1>Welcome to PokeBuddy</h1>
@@ -96,6 +96,7 @@ const Home = () => {
               >
                 {pokemonList.map((pokemon) => (
                   <MenuItem
+                    key={pokemon.name}
                     value={pokemon.name}
                     onClick={() => openPokemonWindow(pokemon.name)}
                   >

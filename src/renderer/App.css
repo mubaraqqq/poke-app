@@ -35,8 +35,27 @@ button {
 
 h1,
 h3,
-p {
+h1 + h3 + p {
   text-align: center;
+}
+
+p + p,
+img + p {
+  text-transform: capitalize;
+}
+
+img + p {
+  font-size: 12px;
+}
+
+img[width='30'] {
+  border: 1px solid rgb(250, 247, 247);
+  padding: 0.5em;
+  border-radius: 100%;
+}
+
+p[title='pokemon-type'] {
+  margin-top: 40px;
 }
 
 button:hover {
