@@ -1,5 +1,4 @@
 import { Stack } from '@mui/material';
-import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { capitalize } from 'main/util';
 import { useEffect, useState } from 'react';
@@ -9,8 +8,8 @@ import { resolvePokemonTypes } from 'renderer/constants';
 import { PokemonDoc } from 'types/pokemon-type';
 
 const PokemonDetails = () => {
-  const [message, setMessage] = useState<string>('');
-  const capitalizedName = capitalize(message);
+  const [pokemonName, setPokemonName] = useState<string>('');
+  const capitalizedName = capitalize(pokemonName);
 
   const fetchPokemon = (name: string) =>
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}/`).then((res) =>
@@ -19,15 +18,17 @@ const PokemonDetails = () => {
 
   useEffect(() => {
     window.electron.ipcRenderer.receivePoke((data) => {
-      setMessage(data[0]);
+      setPokemonName(data[0]);
     });
-  }, [message]);
+  }, [pokemonName]);
 
   const {
     isLoading,
     isError,
     data: pokemon,
-  } = useQuery<PokemonDoc>(['pokemon', message], () => fetchPokemon(message));
+  } = useQuery<PokemonDoc>(['pokemon', pokemonName], () =>
+    fetchPokemon(pokemonName)
+  );
 
   if (isLoading)
     return (

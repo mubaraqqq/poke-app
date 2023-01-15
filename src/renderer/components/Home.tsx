@@ -7,13 +7,18 @@ import {
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import gsap from 'gsap';
 import { capitalize } from 'main/util';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { PokemonListResponse } from 'types/api-type';
 import icon from '../../../assets/icon.png';
 
 const Home = () => {
+  const iconRef = useRef<HTMLImageElement>(null);
+  const BoxRef = useRef<HTMLDivElement>(null);
+  const didAnimate = useRef(false);
+
   const [page, setPage] = useState<number>(0);
   const [pokemonName, setpokemonName] = useState('');
 
@@ -54,22 +59,47 @@ const Home = () => {
     window.electron.ipcRenderer.sendMessage('open-pokemon', data);
   }, []);
 
-  // useEffect(() => {
-  //   if (response) {
-  //     openPokemonWindow(response.results[0].name);
-  //   }
-  // }, [openPokemonWindow, response]);
+  useEffect(() => {
+    if (didAnimate.current) return;
+    didAnimate.current = true;
+
+    const tl = gsap.timeline();
+
+    if (BoxRef && iconRef) {
+      tl.fromTo(
+        BoxRef.current,
+        {
+          autoAlpha: 0,
+        },
+        {
+          autoAlpha: 1,
+          duration: 2.5,
+        },
+        0
+      ).from(
+        iconRef.current,
+        {
+          autoAlpha: 0,
+          duration: 1.5,
+          y: 125,
+        },
+        0
+      );
+    }
+  }, []);
 
   // if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching Pokemon List</div>;
-  if (!response) return <div>Pokemon List not found</div>;
+  // if (isError) return <div>Error fetching Pokemon List</div>;
+  // if (!response) return <div>Pokemon List not found</div>;
 
-  const pokemonList = response.results;
+  const pokemonList = response?.results;
 
   return (
-    <div>
+    <div ref={BoxRef}>
+      {isError && <div>Error fetching Pokemon List</div>}
+
       <div className="Hello">
-        <img width="125" height="125" alt="icon" src={icon} />
+        <img ref={iconRef} width="125" height="125" alt="icon" src={icon} />
       </div>
 
       <h1>Welcome to PokeBuddy</h1>
@@ -94,7 +124,7 @@ const Home = () => {
                 onChange={onChangePokemon}
                 sx={{ backgroundColor: '#ffffff' }}
               >
-                {pokemonList.map((pokemon) => (
+                {pokemonList?.map((pokemon) => (
                   <MenuItem
                     key={pokemon.name}
                     value={pokemon.name}
