@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { PokemonListResponse } from 'types/api-type';
-import icon from '../../../assets/icon.svg';
+import icon from '../../../assets/icon.png';
 
 const Home = () => {
   // const { ipcRenderer } = window.electron;
@@ -42,40 +42,12 @@ const Home = () => {
 
   const pokemonList = response.results;
 
-  console.log(pokemonList);
-
   return (
     <div>
       <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
+        <img width="125" alt="icon" src={icon} />
       </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="folded hands">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
+      <h1>Welcome to PokeBuddy</h1>
       <button type="button" onClick={() => openPokemonWindow('Clicked')}>
         About
       </button>

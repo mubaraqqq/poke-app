@@ -36,7 +36,7 @@ const PokemonDetails = () => {
   return (
     <HelmetProvider>
       <Helmet>
-        <title>{`About Pokemon - ${message}`}</title>
+        <title>{`Pokemon - ${message}`}</title>
       </Helmet>
 
       <div>Pokemon name - {message}</div>
