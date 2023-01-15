@@ -86,6 +86,7 @@ if (process.env.NODE_ENV === 'production') {
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
+// Uncomment the following line if you want to show debug mode/devtools
 if (isDebug) {
   require('electron-debug')();
 }

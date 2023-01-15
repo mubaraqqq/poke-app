@@ -1,11 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels =
-  | 'receive-pokemon'
-  | 'open-pokemon'
-  | 'fee'
-  | 'ipc-example'
-  | '5';
+export type Channels = 'receive-pokemon' | 'open-pokemon';
 
 const electronHandler = {
   ipcRenderer: {
