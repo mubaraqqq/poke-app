@@ -16,3 +16,9 @@ This is a desktop application built with Electron and React with TypeScript, usi
 3. GSAP
 4. Electron
 5. React Query
+
+## To Run The Application
+
+- Clone the repo
+- Install dependencies with npm install in the root directory
+- And run the application with npm start
