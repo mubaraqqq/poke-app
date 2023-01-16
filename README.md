@@ -1,6 +1,6 @@
 # Poke-App
 
-This is a desktop application built with Electron and React with TypeScript, using the [electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
+This is a desktop application built with Electron and React with TypeScript, using the [electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate) template.
 
 ## Features
 
